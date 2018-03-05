@@ -1,0 +1,120 @@
+﻿@using CMS.Application.Module.Dto
+@using Abp.Extensions;
+@model ModuleTreeNode
+@{
+    Layout = null;
+    Guid? currentId = ViewBag.CurrentMenuId;
+    
+    var colors = new List<string>
+    {
+        "bg-danger",
+        "bg-orange",
+        "bg-warning",
+        "bg-success",
+        "bg-info",
+        "bg-primary-light",
+        "bg-violet"
+    };
+
+    int colorIndex = 0;
+}
+
+@helper SubItem(ModuleTreeNode model)
+{
+    if (model.Children.Count > 0)
+    {
+        Guid? currentId = ViewBag.CurrentMenuId;
+
+        <ul class="carte-children">
+            @foreach (var item in model.Children)
+            {
+                var clsName = string.Empty;
+                if (item.Id == currentId && item.IsActived)
+                {
+                    clsName = "current";
+                }
+                else if (item.IsActived)
+                {
+                    clsName = "active";
+                }
+
+                string url;
+                if (string.IsNullOrEmpty(item.AppUrl) || item.AppUrl == "#")
+                {
+                    url = "#";
+                }
+                else
+                {
+                    url = Url.Content(item.AppUrl + "?mid=" + item.Id);
+                }
+                if (IsGranted<Guid, Guid>(item.ModuleCode, "CMS.Display"))
+                {
+                    <li class="@clsName">
+                        <a href="@url">
+                            <span class="title">@item.DisplayName</span>
+                            @if (item.Children.Count > 0)
+                            {
+                                string spread = string.Empty;
+                                if (!string.IsNullOrEmpty(clsName))
+                                {
+                                    spread = "icon-spread";
+                                }
+                                <i class="icon-play icon-has-ul @spread"></i>
+                            }
+                        </a>
+                        @SubItem(item)
+                    </li>
+                }
+            }
+        </ul>
+    }
+}
+
+<aside class="nav-aside">
+    <nav class="nav-wrapper">
+        <ul class="carte">
+            @foreach (var item in Model.Children)
+            {
+                if (colorIndex > colors.Count)
+                {
+                    colorIndex = 0;
+                }
+                
+                var clsName = string.Empty;
+                if (item.Id == currentId && item.IsActived)
+                {
+                    clsName = "current";
+                }
+                else if (item.IsActived)
+                {
+                    clsName = "active";
+                }
+
+                string url;
+                if (string.IsNullOrEmpty(item.AppUrl) || item.AppUrl == "#")
+                {
+                    url = "#";
+                }
+                else
+                {
+                    url = Url.Content(item.AppUrl + "?mid=" + item.Id);
+                }
+                
+                if (IsGranted<Guid, Guid>(item.ModuleCode, "CMS.Display"))
+                {
+                    <li class="@clsName" data-id="@item.Id">
+                        <a href="@url">
+                            <i class="@item.ClassName">
+                                <span class="icon-bg @colors[colorIndex]"></span>
+                            </i>
+                            <span class="title">@item.DisplayName</span>
+                        </a>
+                        @SubItem(item)
+                    </li>
+
+                    colorIndex ++;
+                }
+            }
+        </ul>
+    </nav>
+</aside>

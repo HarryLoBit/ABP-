@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Abp.MongoDB</name>
+    </assembly>
+    <members>
+        <member name="T:Abp.Configuration.Startup.AbpMongoDbConfigurationExtensions">
+            <summary>
+            Defines extension methods to <see cref="T:Abp.Configuration.Startup.IModuleConfigurations"/> to allow to configure ABP MongoDb module.
+            </summary>
+        </member>
+        <member name="M:Abp.Configuration.Startup.AbpMongoDbConfigurationExtensions.AbpMongoDb(Abp.Configuration.Startup.IModuleConfigurations)">
+            <summary>
+            Used to configure ABP MongoDb module.
+            </summary>
+        </member>
+        <member name="T:Abp.MongoDb.AbpMongoDbModule">
+            <summary>
+            This module is used to implement "Data Access Layer" in MongoDB.
+            </summary>
+        </member>
+        <member name="T:Abp.MongoDb.IMongoDatabaseProvider">
+            <summary>
+            Defines interface to obtain a <see cref="T:MongoDB.Driver.MongoDatabase"/> object.
+            </summary>
+        </member>
+        <member name="P:Abp.MongoDb.IMongoDatabaseProvider.Database">
+            <summary>
+            Gets the <see cref="T:MongoDB.Driver.MongoDatabase"/>.
+            </summary>
+        </member>
+        <member name="T:Abp.MongoDb.Repositories.MongoDbRepositoryBase`1">
+            <summary>
+            Implements IRepository for MongoDB.
+            </summary>
+            <typeparam name="TEntity">Type of the Entity for this repository</typeparam>
+        </member>
+        <member name="T:Abp.MongoDb.Repositories.MongoDbRepositoryBase`2">
+            <summary>
+            Implements IRepository for MongoDB.
+            </summary>
+            <typeparam name="TEntity">Type of the Entity for this repository</typeparam>
+            <typeparam name="TPrimaryKey">Primary key of the entity</typeparam>
+        </member>
+        <member name="T:Abp.MongoDb.Uow.UnitOfWorkMongoDatabaseProvider">
+            <summary>
+            Implements <see cref="T:Abp.MongoDb.IMongoDatabaseProvider"/> that gets database from active unit of work.
+            </summary>
+        </member>
+        <member name="T:Abp.MongoDb.Uow.MongoDbUnitOfWork">
+            <summary>
+            Implements Unit of work for MongoDB.
+            </summary>
+        </member>
+        <member name="P:Abp.MongoDb.Uow.MongoDbUnitOfWork.Database">
+            <summary>
+            Gets a reference to MongoDB Database.
+            </summary>
+        </member>
+        <member name="M:Abp.MongoDb.Uow.MongoDbUnitOfWork.#ctor(Abp.MongoDb.Configuration.IAbpMongoDbModuleConfiguration,Abp.Domain.Uow.IUnitOfWorkDefaultOptions)">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+    </members>
+</doc>

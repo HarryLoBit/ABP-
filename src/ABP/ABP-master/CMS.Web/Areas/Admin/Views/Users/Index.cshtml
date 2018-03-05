@@ -1,0 +1,136 @@
+﻿@model IEnumerable<CMS.Application.User.Dto.UserEditDto>
+@{
+    ViewBag.Title = L("Users.UserList");
+    string searchBy = ViewBag.SearchBy;
+    string searchContent = ViewBag.SearchContext;
+
+    var hasAdd = IsGranted<Guid,Guid>("CMS.Admin.Users", "CMS.Create");
+    var hasEdit = IsGranted<Guid, Guid>("CMS.Admin.Users", "CMS.Update");
+    var hasDelete = IsGranted<Guid, Guid>("CMS.Admin.Users", "CMS.Delete");
+    var hasSearch = IsGranted<Guid, Guid>("CMS.Admin.Users", "CMS.Search");
+    
+    string url = Url.Content("~/Admin/Users/Index?SearchBy=" + searchBy + "&SearchContent=" + searchContent + "&page=");
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <div class="breadcrumb">
+        <a href="#">@L("Users.Setup")</a>
+        <a href="~/Admin/Users/Index" class="active">@ViewBag.Title</a>
+    </div>
+</div>
+
+<section id="container">
+    <nav class="navbar navbar-default navbar-custom">
+        <div class="row clear-lr-margin">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clear-lr-padding">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-type">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <ul class="nav-tools">
+                        @if (hasAdd)
+                        {
+                            <li><a href="~/Admin/Users/Create/" class="nav-btn"><i class="fa fa-plus"></i><span>@L("Tools.Add")</span></a></li>
+                        }
+                        @if (hasEdit)
+                        {
+                            <li><a href="#" rel="~/Admin/Users/Edit/" class="nav-btn edit"><i class="fa fa-edit"></i><span>@L("Tools.Edit")</span></a></li>
+                        }
+                        @if (hasDelete)
+                        {
+                            <li><a href="#" rel="~/Admin/Users/Delete/" class="nav-btn delete"><i class="fa fa-remove"></i><span>@L("Tools.Delete")</span></a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clear-lr-padding">
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-collapse-type">
+                    @if (hasSearch)
+                    {
+                        <form class="navbar-form navbar-left clear-border" action="@Url.Content("~/Admin/Users/Index")" method="get" id="searchform">
+                            <div class="form-group">
+                                <select class="form-control" id="SearchBy" name="SearchBy">
+                                    <option value="">@L("Search.AllOptions")</option>
+                                    <option value="UserName" @(searchBy == "UserName" ? "selected" : "")>@L("Dto.UserName")</option>
+                                    <option value="FirstName" @(searchBy == "FirstName" ? "selected" : "")>@L("Dto.FirstName")</option>
+                                    <option value="LastName" @(searchBy == "LastName" ? "selected" : "")>@L("Dto.LastName")</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input name="SearchContent" id="SearchContent" type="text" class="form-control" placeholder="@L("Search.Search...")">
+                            </div>
+                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </form>
+                    }
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+        </div><!-- /.row -->
+    </nav>
+
+
+    <div class="row cust-row">
+        <div class="col-xs-12">
+            <!-- table -->
+            <table class="table table-celled table-striped  table-hover">
+                <thead>
+                    <tr>
+                        <th class="center">
+                            <input type="checkbox" />
+                        </th>
+                        <th>User Name</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Created Time</th>
+                        <th class="btn-item2"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="center">
+                                <input type="checkbox" value="@item.Id" />
+                            </td>
+                            <td>@item.UserName</td>
+                            <td>@item.FirstName</td>
+                            <td>@item.LastName</td>
+                            <td>@item.Email</td>
+                            <td>@item.CreationTime</td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    @if (hasEdit)
+                                    {
+                                        <a href="~/Admin/Users/Edit/@item.Id" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i></a>
+                                    }
+                                    @if (hasDelete)
+                                    {
+                                        <a name="btnDelete" href="~/Admin/Users/Delete/@item.Id" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <!-- end table -->
+            <!--@@Html.Pager(ViewBag.PageModel as PageEntry, url)-->
+
+        </div>
+    </div>
+
+</section>
+<script type="text/javascript">
+    $(function () {
+        $("#Search").on("click", function () {
+            $("form").submit();
+        });
+    });
+</script>
